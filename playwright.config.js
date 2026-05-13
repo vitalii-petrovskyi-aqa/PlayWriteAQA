@@ -1,54 +1,97 @@
 // @ts-check
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test'
 
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+// require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
-export default defineConfig({
-  testDir: './tests',
+const config = defineConfig({
+  // testDir: './tests',
+  testMatch: '/tests/**/*.spec.js',
+  testIgnore: '/tests/**/*.skip.spec.js',
+  // globalSetup: process.env.ENV === 'stage' ? './global.setup.js' : undefined,
+  // globalTeardown: './global.teardown.js',
   /* Run tests in files in parallel */
-  fullyParallel: true,
+  fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: 1,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: 3,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('')`. */
-    // baseURL: 'http://localhost:3000',
+    headless: false,
+    /* Base URL to use in actions like `await page.goto('/')`. */
+    baseURL: 'https://qauto.forstudy.space/',
+    httpCredentials: {
+      username: 'guest',
+      password: 'welcome2qauto'
+    },
+    viewport: {
+      width: 1920,
+      height: 1080
+    },
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
+    video: 'retain-on-failure',
+    screenshot: 'only-on-failure'
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: "setup:stage",
+      testMatch: 'tests/setup/**/*.setup.js'
+    },
+    {
+      name: 'teardown:stage',
+      testMatch: 'tests/teardown/**/*.teardown.js'
+    },
+    {
+      name: 'stage',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'https://qauto.forstudy.space/',
+      },
+      dependencies: ['setup:stage'],
+      teardown: 'teardown:stage'
     },
 
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      name: 'dev',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'https://qauto2.forstudy.space/',
+      },
     },
-
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    
+    // {
+    //   name: 'chromium',
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //   },
+    // },
+    // {
+    //   name: 'firefox',
+    //   use: {
+    //     ...devices['Desktop Firefox']
+    //
+    //   },
+    // },
+    //
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     /* Test against mobile viewports. */
     // {
@@ -69,13 +112,30 @@ export default defineConfig({
     //   name: 'Google Chrome',
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
+
+    // {
+    //   name: 'stage',
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     baseURL: 'https://qauto.forstudy.space/',
+    //   },
+    // },
+    //
+    // {
+    //   name: 'dev',
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     baseURL: 'https://qauto2.forstudy.space/',
+    //   },
+    // },
   ],
 
   /* Run your local dev server before starting the tests */
   // webServer: {
   //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
+  //   url: 'http://127.0.0.1:3000',
   //   reuseExistingServer: !process.env.CI,
   // },
 });
 
+export default config

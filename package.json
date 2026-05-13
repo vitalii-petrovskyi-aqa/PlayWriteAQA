@@ -1,0 +1,26 @@
+{
+  "name": "playwriteaqa",
+  "version": "1.0.0",
+  "description": "Testing Hillel",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "result": "npx playwright show-report"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitalii-petrovskyi-aqa/PlayWriteAQA.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/vitalii-petrovskyi-aqa/PlayWriteAQA/issues"
+  },
+  "homepage": "https://github.com/vitalii-petrovskyi-aqa/PlayWriteAQA#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^25.6.0"
+  }
+}

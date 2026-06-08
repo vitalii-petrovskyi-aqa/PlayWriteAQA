@@ -14,7 +14,9 @@
     "hw23": "npx playwright test tests/registration_form/registrationForm.spec.js --reporter=dot",
     "hw23u": "npx playwright test tests/registration_form/registrationForm.spec.js --ui",
     "hw26": "npx playwright test tests/locators/hw26.spec.js --reporter=dot",
-    "hw26u": "npx playwright test tests/locators/hw26.spec.js --ui"
+    "hw26u": "npx playwright test tests/locators/hw26.spec.js --ui",
+    "hw27": "npx playwright test tests/locators/hw27.spec.js",
+    "hw27u": "npx playwright test tests/locators/hw27.spec.js --ui"
   },
   "repository": {
     "type": "git",

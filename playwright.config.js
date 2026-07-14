@@ -2,6 +2,7 @@
 import { defineConfig, devices } from '@playwright/test'
 import dotenv from 'dotenv'
 import path from 'node:path'
+import {USER1_STORAGE_STATE_PATH} from "./src/data/constants.js";
 
 /**
  * Read environment variables from file.
@@ -20,17 +21,24 @@ const config = defineConfig({
   testIgnore: '/tests/**/*.skip.spec.js',
   globalSetup: process.env.ENV === 'stage' ? './global.setup.js' : undefined,
   globalTeardown: './global.teardown.js',
-  maxFailures: 10,
   /* Run tests in files in parallel */
   fullyParallel: false,
+    timeout: 60_000,
+  expect: {
+    timeout: 6_000
+  },
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
+   maxFailures: 10,
   /* Retry on CI only */
   retries: 0,
   /* Opt out of parallel tests on CI. */
   workers: 3,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [
+    ['html', {open: process.env.CI ? 'never' : 'on-failure'}],
+    [process.env.CI ? 'dot' : 'list']
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     headless: false,
@@ -56,6 +64,14 @@ const config = defineConfig({
     {
       name: "setup:stage",
       testMatch: 'tests/setup/**/*.setup.js'
+    },
+        {
+      name: 'chromium',
+      dependencies: ['setup:stage'],
+      use: {
+        ...devices['Desktop Chrome'],
+        // storageState: USER1_STORAGE_STATE_PATH
+      },
     },
     // {
     //   name: 'teardown:stage',

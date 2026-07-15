@@ -95,13 +95,13 @@ const config = defineConfig({
     //   },
     // },
     
-    {
-      name: 'chromium',
-      dependencies: ['setup:stage'],
-      use: {
-        ...devices['Desktop Chrome'],
-      },
-    },
+    // {
+    //   name: 'chromium',
+    //   dependencies: ['setup:stage'],
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //   },
+    // },
     // {
     //   name: 'firefox',
     //   use: {

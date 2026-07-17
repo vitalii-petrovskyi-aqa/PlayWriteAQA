@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import path from 'node:path'
 import {USER1_STORAGE_STATE_PATH} from "./src/data/constants.js";
 
+
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -36,8 +37,13 @@ const config = defineConfig({
   workers: 3,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ['html', {open: process.env.CI ? 'never' : 'on-failure'}],
-    [process.env.CI ? 'dot' : 'list']
+
+    // ['html', {open: process.env.CI ? 'never' : 'on-failure'}],
+    // [process.env.CI ? 'dot' : 'list']
+
+    ['html'],
+    [process.env.CI ? 'github' : 'list']
+
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
